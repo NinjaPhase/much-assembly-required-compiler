@@ -1,0 +1,41 @@
+
+move(direction) {
+    asm {
+        pop A
+        pop B
+        MOV A, 0x2
+        MOV B, $direction
+        hwi 0x1
+        push B
+        push A
+    };
+}
+
+get_battery() {
+    x = 0;
+    asm {
+        pop A
+        mov A, 0x1
+        hwi 0xA
+        mov $x, B
+        push A
+    };
+    return x;
+}
+
+display(val) {
+    asm {
+        pop A
+        pop B
+        mov A, 0x1
+        mov B, $val
+        hwi 0x9
+        push B
+        push A
+    };
+}
+
+main() {
+	x = get_battery();
+    display(x);
+}
